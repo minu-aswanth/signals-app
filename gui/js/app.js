@@ -1,3 +1,4 @@
+//default map
 var mymap = L.map('mainMap').setView([17.3850, 78.4867], 13);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	maxZoom: 18,
@@ -18,6 +19,11 @@ $.get("../utils/all.php", function(data, status){
 		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button id="updateSignalButton">Update signal</button><button id="deleteSignalButton">Delete signal</button>');
 		marker.on("popupopen", onPopupOpen);
 	}
+
+	for(i=0; i<signalsArray.length; i++){
+		$("#createGroupButton").before('<input type="checkbox" name="signals[]" value="' + signalsArray[i].id + '">' + signalsArray[i].name + '<br>');
+	}
+	
 });
 
 //to open a popup
@@ -44,6 +50,7 @@ function addSignal(){
 		var marker = L.marker([lat, lng]).addTo(mymap);
 		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button id="updateSignalButton">Update signal</button><button id="deleteSignalButton">Delete signal</button>');
 		marker.on("popupopen", onPopupOpen);
+		$("#individualGroupForm").empty();
 	});
 	
 }
@@ -67,6 +74,7 @@ function onPopupOpen() {
 			//bind new popup
 			marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button id="updateSignalButton">Update signal</button><button id="deleteSignalButton">Delete signal</button>');
 			marker.on("popupopen", onPopupOpen);
+			$("#individualGroupForm").empty();
 		});
 	});
     document.getElementById("deleteSignalButton").addEventListener("click", function(){
@@ -80,7 +88,39 @@ function onPopupOpen() {
 			console.log(response);
 			var signalId = JSON.parse(response);
 			mymap.removeLayer(tempMarker);
+			$("#individualGroupForm").empty();	
 		});
     	
     });
 }
+
+//Second part i.e. groups
+$("#individualGroupButton").click(function(){
+	$("#individualGroupForm").empty();
+	$.get("../utils/all.php", function(data, status){
+		var signalsArray = JSON.parse(data);
+		$("#individualGroupForm").append('Group Name: <input id="groupNameInput" type=text name="groupName"><br>');
+		for(i=0; i<signalsArray.length; i++){
+			$("#individualGroupForm").append('<input type="checkbox" name="signals" value="' + signalsArray[i].id + '">' + signalsArray[i].name + '<br>');
+		}
+		$("#individualGroupForm").append('<button id="createGroupButton">Create group</button><button id="cancelGroupButton">Cancel</button>');
+		
+		$("#createGroupButton").click(function(){
+			var signalIds = [];
+			$.each($("input[name='signals']:checked"), function(){            
+                signalIds.push($(this).val());
+            });
+            var groupName = $("#groupNameInput").val();
+            var data = {"name": groupName, "id": signalIds};
+            $.post("../utils/add_group.php", "x="+JSON.stringify(data), function(response, status){
+            	console.log(response);
+            })
+		});
+
+		//cancel button closes destroys the form
+		$("#cancelGroupButton").click(function(){
+			$("#individualGroupForm").empty();
+		});
+	});
+});
+
