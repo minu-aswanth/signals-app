@@ -1,5 +1,15 @@
 #mainMap{
 	position: absolute;
-	height: 90%;
-	width: 90%;
+	height: 98%;
+	width: 80%;
+}
+
+#individualGroupButton{
+	position: absolute;
+	left: 82%;
+}
+
+#drawBoxButton{
+	position: absolute;
+	left: 90%;
 }
