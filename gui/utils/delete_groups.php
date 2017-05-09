@@ -3,7 +3,7 @@ include('dblinker.php');
 try{
 	//$obj = json_decode($_POST["x"], false);
 	
-	$stmt = $conn->prepare("DELETE FROM signalgroupss WHERE signals='".$_POST["x"]."'" );
+	$stmt = $conn->prepare("DELETE FROM signalgroups WHERE signals='".$_POST["x"]."'" );
     $stmt->execute();
 	
 	echo 'success';

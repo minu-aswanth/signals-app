@@ -200,23 +200,41 @@ mymap.on('draw:created', function(e) {
 });
 
 //next tab i.e showing created groups
-$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signal Ids</th><th>Signals in group</th><th>Delete group</th></tr>');
-$.get("../utils/get_all_groups.php", function(response, status){
-	var parsedResponse = JSON.parse(response);
-	for(i=0;i<parsedResponse.length;i++){
-		var groupName = parsedResponse[i].name;
-		var signalIds = parsedResponse[i].signals;
-		var signalNames = parsedResponse[i].signalnames;
-		console.log(signals);
-		$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
-	}
-	$("#groupsTable").append('</table>');
+$("#createdGroupsTab").click(function(){
+	$("#groupsTable").empty();
+	$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
+	$.get("../utils/get_all_groups.php", function(response, status){
+		var parsedResponse = JSON.parse(response);
+		for(i=0;i<parsedResponse.length;i++){
+			var groupName = parsedResponse[i].name;
+			var signalIds = parsedResponse[i].signals;
+			var signalNames = parsedResponse[i].signalnames;
+			$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
+		}
+		$("#groupsTable").append('</table>');
+	});
+
+
 });
 
 function deleteGroup(ids){
-	$.post("../utils/delete_groups.php", "x="+JSON.stringify(ids), function(response, status){
-		if(response == "success")
+	console.log(ids);
+	$.post("../utils/delete_groups.php", "x="+ids, function(response, status){
+		if(response == "success"){
 			alert("The group was deleted successfully");
+			$("#groupsTable").empty();
+			$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
+			$.get("../utils/get_all_groups.php", function(response, status){
+				var parsedResponse = JSON.parse(response);
+				for(i=0;i<parsedResponse.length;i++){
+					var groupName = parsedResponse[i].name;
+					var signalIds = parsedResponse[i].signals;
+					var signalNames = parsedResponse[i].signalnames;
+					$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
+				}
+				$("#groupsTable").append('</table>');
+			});
+		}
 		else
 			alert("Some error occured. Please try again");
 	});
