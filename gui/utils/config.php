@@ -1,6 +1,6 @@
 <?php
-$servername = "servername";
-$username = "username";
+$servername = "localhost";
+$username = "phpmyadmin";
 $password = "password";
-$dbname = "dbname";
+$dbname = "itspe";
 ?>
