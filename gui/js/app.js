@@ -95,6 +95,8 @@ function onPopupOpen() {
 }
 
 //Second part i.e. groups
+
+//individual
 $("#individualGroupButton").click(function(){
 	$("#individualGroupForm").empty();
 	$.get("../utils/all.php", function(data, status){
@@ -113,7 +115,11 @@ $("#individualGroupButton").click(function(){
             var groupName = $("#groupNameInput").val();
             var data = {"name": groupName, "id": signalIds};
             $.post("../utils/add_group.php", "x="+JSON.stringify(data), function(response, status){
-            	console.log(response);
+            	$("#individualGroupForm").empty();
+				if(response == "success")
+					alert("Group was successfully created");
+				else
+					alert("There was some error. Please try again");            	
             })
 		});
 
@@ -124,3 +130,81 @@ $("#individualGroupButton").click(function(){
 	});
 });
 
+//draw on map
+var drawnItems = new L.FeatureGroup();
+    mymap.addLayer(drawnItems);
+    var drawControl = new L.Control.Draw({
+     	position: 'topright',
+	  	draw: {
+	    // disable toolbar item by setting it to false
+	    polygon: false,
+	    polyline: false,
+	    circle: false, // Turns off this drawing tool
+	    marker: false
+	    },
+        edit: {
+            featureGroup: drawnItems,
+            edit: false,
+            remove: false
+        }
+    });
+    mymap.addControl(drawControl);
+mymap.on('draw:created', function(e) {
+	$("#individualGroupForm").empty();
+  	console.log(e.layer._latlngs[0]);
+  	var latLimitsFirst = e.layer._latlngs[0][0].lat;
+  	var latLimitsSecond = e.layer._latlngs[0][2].lat;
+  	var lngLimitsFirst = e.layer._latlngs[0][0].lng;
+  	var lngLimitsSecond = e.layer._latlngs[0][2].lng;
+  	var signalIds = [];
+  	var signalNames = [];
+  	$.get("../utils/all.php", function(data, status){
+		var signalsArray = JSON.parse(data);
+		for(i=0;i<signalsArray.length;i++){
+			var lat = signalsArray[i].lat;
+			var lng = signalsArray[i].lon;
+			var signalName = signalsArray[i].name;
+			var signalId = signalsArray[i].id;
+			if(lat > latLimitsFirst && lat < latLimitsSecond && lng > lngLimitsFirst && lng < lngLimitsSecond){
+				signalIds.push(signalId);
+				signalNames.push(signalName);
+			}
+		}
+		console.log(signalIds);
+		$("#individualGroupForm").append('Group Name: <input id="groupNameInput" type=text name="groupName"><br><br>You have selected:<br>');
+		
+		for(i=0; i<signalNames.length; i++){
+			$("#individualGroupForm").append('<p>' + signalNames[i] + '</p>');
+		}
+		$("#individualGroupForm").append('<button id="createGroupButton">Create group</button><button id="cancelGroupButton">Cancel</button>');
+		
+		$("#createGroupButton").click(function(){
+            var groupName = $("#groupNameInput").val();
+            var data = {"name": groupName, "id": signalIds};
+            $.post("../utils/add_group.php", "x="+JSON.stringify(data), function(response, status){
+            	$("#individualGroupForm").empty();
+				if(response == "success")
+					alert("Group was successfully created");
+				else
+					alert("There was some error. Please try again");            	
+            })
+		});
+
+		//cancel button closes destroys the form
+		$("#cancelGroupButton").click(function(){
+			$("#individualGroupForm").empty();
+		});
+	});
+});
+
+//next tab i.e showing created groups
+$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signals in group</th></tr>');
+$.get("../utils/get_all_groups.php", function(response, status){
+	var parsedResponse = JSON.parse(response);
+	for(i=0;i<parsedResponse.length;i++){
+		var groupName = parsedResponse[i].name;
+		var signals = parsedResponse[i].signals;
+		$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + Signals + '</td></tr>');
+	}
+	$("#groupsTable").append('</table>');
+});
