@@ -103,17 +103,19 @@ $("#individualGroupButton").click(function(){
 		var signalsArray = JSON.parse(data);
 		$("#individualGroupForm").append('Group Name: <input id="groupNameInput" type=text name="groupName"><br>');
 		for(i=0; i<signalsArray.length; i++){
-			$("#individualGroupForm").append('<input type="checkbox" name="signals" value="' + signalsArray[i].id + '">' + signalsArray[i].name + '<br>');
+			$("#individualGroupForm").append('<input type="checkbox" name="signals" value="' + signalsArray[i].id + "|||" + signalsArray[i].name + '">' + signalsArray[i].name + '<br>');
 		}
 		$("#individualGroupForm").append('<button id="createGroupButton">Create group</button><button id="cancelGroupButton">Cancel</button>');
 		
 		$("#createGroupButton").click(function(){
 			var signalIds = [];
+			var signalNames = [];
 			$.each($("input[name='signals']:checked"), function(){            
-                signalIds.push($(this).val());
+                signalIds.push($(this).val().split("|||")[0]);
+                signalNames.push($(this).val().split("|||")[1]);
             });
             var groupName = $("#groupNameInput").val();
-            var data = {"name": groupName, "id": signalIds};
+            var data = {"name": groupName, "id": signalIds, "signalNames": signalNames};
             $.post("../utils/add_group.php", "x="+JSON.stringify(data), function(response, status){
             	$("#individualGroupForm").empty();
 				if(response == "success")
@@ -180,7 +182,7 @@ mymap.on('draw:created', function(e) {
 		
 		$("#createGroupButton").click(function(){
             var groupName = $("#groupNameInput").val();
-            var data = {"name": groupName, "id": signalIds};
+            var data = {"name": groupName, "id": signalIds, "signalNames": signalNames};
             $.post("../utils/add_group.php", "x="+JSON.stringify(data), function(response, status){
             	$("#individualGroupForm").empty();
 				if(response == "success")
@@ -198,13 +200,24 @@ mymap.on('draw:created', function(e) {
 });
 
 //next tab i.e showing created groups
-$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signals in group</th></tr>');
+$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signal Ids</th><th>Signals in group</th><th>Delete group</th></tr>');
 $.get("../utils/get_all_groups.php", function(response, status){
 	var parsedResponse = JSON.parse(response);
 	for(i=0;i<parsedResponse.length;i++){
 		var groupName = parsedResponse[i].name;
-		var signals = parsedResponse[i].signals;
-		$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + Signals + '</td></tr>');
+		var signalIds = parsedResponse[i].signals;
+		var signalNames = parsedResponse[i].signalnames;
+		console.log(signals);
+		$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
 	}
 	$("#groupsTable").append('</table>');
 });
+
+function deleteGroup(ids){
+	$.post("../utils/delete_groups.php", "x="+JSON.stringify(ids), function(response, status){
+		if(response == "success")
+			alert("The group was deleted successfully");
+		else
+			alert("Some error occured. Please try again");
+	});
+}
