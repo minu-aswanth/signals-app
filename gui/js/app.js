@@ -105,7 +105,7 @@ $("#individualGroupButton").click(function(){
 		for(i=0; i<signalsArray.length; i++){
 			$("#individualGroupForm").append('<input type="checkbox" name="signals" value="' + signalsArray[i].id + "|||" + signalsArray[i].name + '">' + signalsArray[i].name + '<br>');
 		}
-		$("#individualGroupForm").append('<button class="btn btn-primary" id="createGroupButton">Create group</button><button class="btn btn-primary" id="cancelGroupButton">Cancel</button>');
+		$("#individualGroupForm").append('<br><button class="btn btn-success" id="createGroupButton">Create group</button>&nbsp&nbsp&nbsp<button class="btn btn-warning" id="cancelGroupButton">Cancel</button>');
 		
 		$("#createGroupButton").click(function(){
 			var signalIds = [];
@@ -178,7 +178,7 @@ mymap.on('draw:created', function(e) {
 		for(i=0; i<signalNames.length; i++){
 			$("#individualGroupForm").append('<p>' + signalNames[i] + '</p>');
 		}
-		$("#individualGroupForm").append('<button class="btn btn-primary" id="createGroupButton">Create group</button><button class="btn btn-primary" id="cancelGroupButton">Cancel</button>');
+		$("#individualGroupForm").append('<button class="btn btn-success" id="createGroupButton">Create group</button>&nbsp&nbsp&nbsp<button class="btn btn-warning" id="cancelGroupButton">Cancel</button>');
 		
 		$("#createGroupButton").click(function(){
             var groupName = $("#groupNameInput").val();
@@ -202,16 +202,15 @@ mymap.on('draw:created', function(e) {
 //next tab i.e showing created groups
 $("#createdGroupsTab").click(function(){
 	$("#groupsTable").empty();
-	$("#groupsTable").append('<table class="table-bordered"><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
+	$("#groupsTable").append('<table class="table table-bordered"><thead><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr></thead><tbody id="createdTableBody"></tbody></table>');
 	$.get("../utils/get_all_groups.php", function(response, status){
 		var parsedResponse = JSON.parse(response);
 		for(i=0;i<parsedResponse.length;i++){
 			var groupName = parsedResponse[i].name;
 			var signalIds = parsedResponse[i].signals;
 			var signalNames = parsedResponse[i].signalnames;
-			$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button class="btn btn-primary" value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
+			$("#createdTableBody").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button class="btn btn-danger" value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
 		}
-		$("#groupsTable").append('</table>');
 	});
 
 
@@ -223,16 +222,15 @@ function deleteGroup(ids){
 		if(response == "success"){
 			alert("The group was deleted successfully");
 			$("#groupsTable").empty();
-			$("#groupsTable").append('<table class="table-bordered"><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
+			$("#groupsTable").append('<table class="table table-bordered"><thead><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr></thead><tbody id="createdTableBody"></tbody></table>');
 			$.get("../utils/get_all_groups.php", function(response, status){
 				var parsedResponse = JSON.parse(response);
 				for(i=0;i<parsedResponse.length;i++){
 					var groupName = parsedResponse[i].name;
 					var signalIds = parsedResponse[i].signals;
 					var signalNames = parsedResponse[i].signalnames;
-					$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button class="btn btn-primary" value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
+					$("#createdTableBody").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button class="btn btn-danger" value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
 				}
-				$("#groupsTable").append('</table>');
 			});
 		}
 		else
