@@ -1,21 +1,13 @@
 #mainMap{
-	position: absolute;
-	height: 98%;
-	width: 80%;
+	height: 500px;
 }
 
-#individualGroupButton{
+/*#homeTabBody{
 	position: absolute;
-	left: 82%;
+	height: 90%;
 }
 
-#drawBoxButton{
+#mapColumn{
 	position: absolute;
-	left: 90%;
-}
-
-#individualGroupForm{
-	position: absolute;
-	left: 82%;
-	top:15%;
-}
+	height: 100%;
+}*/

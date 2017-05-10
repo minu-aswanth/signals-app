@@ -16,7 +16,7 @@ $.get("../utils/all.php", function(data, status){
 		var signalName = signalsArray[i].name;
 		var signalId = signalsArray[i].id;
 		var marker = L.marker([lat, lng]).addTo(mymap);
-		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button id="updateSignalButton">Update signal</button><button id="deleteSignalButton">Delete signal</button>');
+		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button class="btn btn-primary" id="updateSignalButton">Update signal</button><button class="btn btn-primary" id="deleteSignalButton">Delete signal</button>');
 		marker.on("popupopen", onPopupOpen);
 	}
 
@@ -30,7 +30,7 @@ $.get("../utils/all.php", function(data, status){
 function addMarker(e) {
 	var popup = L.popup()
 		.setLatLng(e.latlng)
-		.setContent('Latitude: <input id="latInput" type="text" name="lat" value="' + e.latlng.lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + e.latlng.lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName"><br><button onclick="addSignal()">Add signal</button>')
+		.setContent('Latitude: <input id="latInput" type="text" name="lat" value="' + e.latlng.lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + e.latlng.lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName"><br><button class="btn btn-primary" onclick="addSignal()">Add signal</button>')
 		.openOn(mymap);
 }
 
@@ -48,7 +48,7 @@ function addSignal(){
 		
 		mymap.closePopup();
 		var marker = L.marker([lat, lng]).addTo(mymap);
-		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button id="updateSignalButton">Update signal</button><button id="deleteSignalButton">Delete signal</button>');
+		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button class="btn btn-primary" id="updateSignalButton">Update signal</button><button class="btn btn-primary" id="deleteSignalButton">Delete signal</button>');
 		marker.on("popupopen", onPopupOpen);
 		$("#individualGroupForm").empty();
 	});
@@ -72,7 +72,7 @@ function onPopupOpen() {
 			//add new marker
 			var marker = L.marker([lat, lng]).addTo(mymap);
 			//bind new popup
-			marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button id="updateSignalButton">Update signal</button><button id="deleteSignalButton">Delete signal</button>');
+			marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button class="btn btn-primary" id="updateSignalButton">Update signal</button><button class="btn btn-primary" id="deleteSignalButton">Delete signal</button>');
 			marker.on("popupopen", onPopupOpen);
 			$("#individualGroupForm").empty();
 		});
@@ -105,7 +105,7 @@ $("#individualGroupButton").click(function(){
 		for(i=0; i<signalsArray.length; i++){
 			$("#individualGroupForm").append('<input type="checkbox" name="signals" value="' + signalsArray[i].id + "|||" + signalsArray[i].name + '">' + signalsArray[i].name + '<br>');
 		}
-		$("#individualGroupForm").append('<button id="createGroupButton">Create group</button><button id="cancelGroupButton">Cancel</button>');
+		$("#individualGroupForm").append('<button class="btn btn-primary" id="createGroupButton">Create group</button><button class="btn btn-primary" id="cancelGroupButton">Cancel</button>');
 		
 		$("#createGroupButton").click(function(){
 			var signalIds = [];
@@ -178,7 +178,7 @@ mymap.on('draw:created', function(e) {
 		for(i=0; i<signalNames.length; i++){
 			$("#individualGroupForm").append('<p>' + signalNames[i] + '</p>');
 		}
-		$("#individualGroupForm").append('<button id="createGroupButton">Create group</button><button id="cancelGroupButton">Cancel</button>');
+		$("#individualGroupForm").append('<button class="btn btn-primary" id="createGroupButton">Create group</button><button class="btn btn-primary" id="cancelGroupButton">Cancel</button>');
 		
 		$("#createGroupButton").click(function(){
             var groupName = $("#groupNameInput").val();
@@ -202,14 +202,14 @@ mymap.on('draw:created', function(e) {
 //next tab i.e showing created groups
 $("#createdGroupsTab").click(function(){
 	$("#groupsTable").empty();
-	$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
+	$("#groupsTable").append('<table class="table-bordered"><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
 	$.get("../utils/get_all_groups.php", function(response, status){
 		var parsedResponse = JSON.parse(response);
 		for(i=0;i<parsedResponse.length;i++){
 			var groupName = parsedResponse[i].name;
 			var signalIds = parsedResponse[i].signals;
 			var signalNames = parsedResponse[i].signalnames;
-			$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
+			$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button class="btn btn-primary" value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
 		}
 		$("#groupsTable").append('</table>');
 	});
@@ -223,14 +223,14 @@ function deleteGroup(ids){
 		if(response == "success"){
 			alert("The group was deleted successfully");
 			$("#groupsTable").empty();
-			$("#groupsTable").append('<table><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
+			$("#groupsTable").append('<table class="table-bordered"><tr><th>Group Name</th><th>Signals in group</th><th>Delete group</th></tr>');
 			$.get("../utils/get_all_groups.php", function(response, status){
 				var parsedResponse = JSON.parse(response);
 				for(i=0;i<parsedResponse.length;i++){
 					var groupName = parsedResponse[i].name;
 					var signalIds = parsedResponse[i].signals;
 					var signalNames = parsedResponse[i].signalnames;
-					$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
+					$("#groupsTable").append('<tr><td>' + groupName + '</td><td>' + signalNames + '</td><td><button class="btn btn-primary" value=' + signalIds + ' onclick="deleteGroup(this.value)">Delete</button></td></tr>');
 				}
 				$("#groupsTable").append('</table>');
 			});
