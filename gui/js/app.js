@@ -28,10 +28,12 @@ $.get("../utils/all.php", function(data, status){
 
 //to open a popup
 function addMarker(e) {
-	var popup = L.popup()
-		.setLatLng(e.latlng)
-		.setContent('Latitude: <input id="latInput" type="text" name="lat" value="' + e.latlng.lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + e.latlng.lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName"><br><button class="btn btn-primary" onclick="addSignal()">Add signal</button>')
-		.openOn(mymap);
+
+	$('#create-signal-modal').modal({
+        show: true
+    });
+	$("#createSignalForm").empty();
+	$("#createSignalForm").append('Latitude: <input id="latInput" type="text" name="lat" value="' + e.latlng.lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + e.latlng.lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName"><br><button class="btn btn-primary" onclick="addSignal()">Add signal</button>');		
 }
 
 //to create a marker and bind a popup
@@ -51,6 +53,7 @@ function addSignal(){
 		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button class="btn btn-primary" id="updateSignalButton">Update signal</button><button class="btn btn-primary" id="deleteSignalButton">Delete signal</button>');
 		marker.on("popupopen", onPopupOpen);
 		$("#individualGroupForm").empty();
+		$('#create-signal-modal').modal('hide');
 	});
 	
 }
@@ -98,6 +101,9 @@ function onPopupOpen() {
 
 //individual
 $("#individualGroupButton").click(function(){
+	$('#create-group-modal').modal({
+        show: true
+    });
 	$("#individualGroupForm").empty();
 	$.get("../utils/all.php", function(data, status){
 		var signalsArray = JSON.parse(data);
@@ -129,6 +135,7 @@ $("#individualGroupButton").click(function(){
 
 		//cancel button closes destroys the form
 		$("#cancelGroupButton").click(function(){
+			$('#create-group-modal').modal('hide');
 			$("#individualGroupForm").empty();
 		});
 	});
@@ -154,6 +161,9 @@ var drawnItems = new L.FeatureGroup();
     });
     mymap.addControl(drawControl);
 mymap.on('draw:created', function(e) {
+	$('#create-group-modal').modal({
+        show: true
+    });
 	$("#individualGroupForm").empty();
   	console.log(e.layer._latlngs[0]);
   	var latLimitsFirst = e.layer._latlngs[0][0].lat;
@@ -196,6 +206,7 @@ mymap.on('draw:created', function(e) {
 
 		//cancel button closes destroys the form
 		$("#cancelGroupButton").click(function(){
+			$('#create-group-modal').modal('hide');
 			$("#individualGroupForm").empty();
 		});
 	});
