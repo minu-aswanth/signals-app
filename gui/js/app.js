@@ -189,6 +189,8 @@ mymap.on('draw:created', function(e) {
             	$("#individualGroupForm").empty();
 				if(response == "success")
 					alert("Group was successfully created");
+				else if(response == "signaloccupied")
+					alert("One or more of the signals already belongs to another group");
 				else
 					alert("There was some error. Please try again");            	
             })

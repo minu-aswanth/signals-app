@@ -22,9 +22,6 @@ try{
 			if($id[$i] == $obj->id){
 				$name[$i]=$obj->name;
 				
-				
-				//$stmt2 = $conn->prepare("DELETE FROM signalgroups WHERE id=".$data['id'] );
-				//$stmt2->execute();
 			}		
 		}
 		$data['signalnames']=implode(',',$name);
