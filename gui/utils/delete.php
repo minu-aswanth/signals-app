@@ -1,6 +1,7 @@
 <?php
 include('dblinker.php');
 try{
+	$conn = dblink();
 	$obj = json_decode($_POST["x"], false);
 	
 	$stmt = $conn->prepare("DELETE FROM signals WHERE id=".$obj->id );

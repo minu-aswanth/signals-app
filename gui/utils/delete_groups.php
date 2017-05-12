@@ -1,6 +1,7 @@
 <?php
 include('dblinker.php');
-try{	
+try{
+	$conn = dblink();	
 	$ids=explode(",",$_POST["x"]);
 	foreach(explode(",",$_POST["x"]) as $signal){
 		$stmt1 = $conn->prepare("UPDATE signals SET grouped = 0 WHERE id = :signal");

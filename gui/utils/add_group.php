@@ -1,6 +1,7 @@
 <?php
 include('dblinker.php');
 try{
+	$conn = dblink();
 	$obj = json_decode($_POST["x"], false);
 	$id_list = implode(',',$obj->id);
 	$signal_names = implode(',',$obj->signalNames);

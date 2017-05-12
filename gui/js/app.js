@@ -15,7 +15,7 @@ $.get("../utils/all.php", function(data, status){
 		var lng = signalsArray[i].lon;
 		var signalName = signalsArray[i].name;
 		var signalId = signalsArray[i].id;
-		var marker = L.marker([lat, lng]).addTo(mymap);
+		var marker = L.marker([lat, lng]).bindLabel(signalName, { noHide: true }).addTo(mymap);
 		marker.bindPopup('<input id="signalId" style="display:none" type="text" name="signalId" value="' + signalId + '">Latitude: <input id="latInput" type="text" name="lat" value="' + lat + '"><br>Longitude: <input id="lngInput" type="text" name="lng" value="' + lng + '"><br>Signal Name: <input id="signalNameInput" type="text" name="signalName" value="' + signalName + '"><br><button class="btn btn-primary" id="updateSignalButton">Update signal</button><button class="btn btn-primary" id="deleteSignalButton">Delete signal</button>');
 		marker.on("popupopen", onPopupOpen);
 	}
@@ -189,8 +189,6 @@ mymap.on('draw:created', function(e) {
             	$("#individualGroupForm").empty();
 				if(response == "success")
 					alert("Group was successfully created");
-				else if(response == "signaloccupied")
-					alert("One or more of the signals already belongs to another group");
 				else
 					alert("There was some error. Please try again");            	
             })

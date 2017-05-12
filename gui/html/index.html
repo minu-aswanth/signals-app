@@ -10,6 +10,15 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
 	<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-draw/v0.2.2/leaflet.draw.js'></script>
+	<link rel="stylesheet" href="../libs/Leaflet.label-master/dist/leaflet.label.css" />
+	
+	<script src="../libs/Leaflet.label-master/libs/leaflet/leaflet-src.js"></script>
+	
+	<script src="../libs/Leaflet.label-master/src/Label.js"></script>
+	<script src="../libs/Leaflet.label-master/src/BaseMarkerMethods.js"></script>
+	<script src="../libs/Leaflet.label-master/src/Marker.Label.js"></script>
+	<script src="../libs/Leaflet.label-master/src/Map.Label.js"></script>
+	
 </head>
 <body>
 	<ul class="nav nav-tabs">
@@ -19,7 +28,7 @@
 
   	<div class="tab-content">
 	    <div id="home" class="tab-pane fade in active">
-		    <div class="container-fluid">
+		    <div class="container">
 		    	<div class="row">
 		    		<div class="col-xs-9">
 		 	     		<div id="mainMap"></div>
@@ -31,7 +40,7 @@
 		 	    </div>
 			</div>
 	    </div>
-	    <div id="createdGroups" class="tab-pane fade text-center">
+	    <div id="createdGroups" class="tab-pane fade">
 	    	<div id="groupsTable"></div>
 	    </div>
   	</div>
